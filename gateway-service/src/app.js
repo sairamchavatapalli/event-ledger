@@ -5,6 +5,7 @@ const morgan = require("morgan");
 
 const traceMiddleware = require("./middleware/trace.middleware");
 const logger = require("./utils/logger");
+const eventRoutes = require("./routes/event.routes");
 
 const app = express();
 
@@ -31,5 +32,7 @@ app.get("/health", (req, res) => {
         service: "gateway-service"
     });
 });
+
+app.use(eventRoutes);
 
 module.exports = app;

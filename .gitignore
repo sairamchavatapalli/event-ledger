@@ -2,8 +2,8 @@ node_modules/
 dist/
 build/
 coverage/
-.env
-.env.*
 logs/
 *.log
 .vscode/
+.gateway-service-db.sqlite
+.account-service-db.sqlite
