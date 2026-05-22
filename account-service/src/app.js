@@ -7,6 +7,11 @@ const morgan = require("morgan");
 const accountRoutes = require("./routes/account.routes");
 const traceMiddleware = require("./middleware/trace.middleware");
 const logger = require("./utils/logger");
+const {
+  httpRequestCounter,
+  client
+} = require("./utils/metrics");
+const sequelize = require("./database/database");
 
 const app = express();
 
@@ -26,13 +31,45 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/health", (req, res) => {
-  res.json({
-    status: "UP",
-    service: "account-service"
+app.use((req, res, next) => {
+  res.on("finish", () => {
+    httpRequestCounter.inc({
+      method: req.method,
+      route: req.route?.path || req.path,
+      status: res.statusCode
+    });
   });
+
+  next();
+});
+
+app.get("/health", async (req, res) => {
+  try {
+    await sequelize.authenticate();
+
+    res.json({
+      status: "UP",
+      service: "account-service",
+      database: "CONNECTED",
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(503).json({
+      status: "DOWN",
+      service: "account-service",
+      database: "DISCONNECTED"
+    });
+  }
 });
 
 app.use(accountRoutes);
+
+app.get("/metrics", async (req, res) => {
+  res.set("Content-Type", client.register.contentType);
+
+  const metrics = await client.register.metrics();
+
+  res.send(metrics);
+});
 
 module.exports = app;
