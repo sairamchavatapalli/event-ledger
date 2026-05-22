@@ -1,0 +1,24 @@
+
+services:
+
+  gateway-service:
+    build: ./gateway-service
+
+    ports:
+      - "3000:3000"
+
+    environment:
+      - PORT=3000
+      - ACCOUNT_SERVICE_URL=http://account-service:3001
+
+    depends_on:
+      - account-service
+
+  account-service:
+    build: ./account-service
+
+    ports:
+      - "3001:3001"
+
+    environment:
+      - PORT=3001
