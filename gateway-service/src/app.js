@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const rateLimit = require("express-rate-limit");
 
 const traceMiddleware = require("./middleware/trace.middleware");
 const logger = require("./utils/logger");
@@ -12,9 +13,24 @@ const {
 } = require("./utils/metrics");
 const sequelize = require("./database/database");
 
+const limiter = rateLimit({
+    windowMs: 60 * 1000, // 1 minute
+
+    max: 100,
+
+    message: {
+        message: "Too many requests, please try again later"
+    },
+
+    standardHeaders: true,
+
+    legacyHeaders: false
+});
+
 const app = express();
 
 app.use(express.json());
+app.use("/events", limiter);
 app.use(cors());
 app.use(helmet());
 app.use(morgan("dev"));

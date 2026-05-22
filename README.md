@@ -215,6 +215,20 @@ POST /events
   "eventTimestamp": "2026-05-22T12:00:00Z"
 }
 ```
+---
+
+## Rate Limiting
+
+Gateway APIs are protected using rate limiting to prevent excessive traffic and improve system stability.
+
+Example:
+- 100 requests per minute per client
+
+Returns:
+
+```http
+429 Too Many Requests
+```
 
 ---
 
