@@ -41,7 +41,7 @@ const processEvent = async (data, traceId) => {
         traceId
     });
 
-    
+
 
     try {
         // Call Account Service
@@ -79,7 +79,9 @@ const processEvent = async (data, traceId) => {
         logger.error({
             traceId,
             eventId,
-            error: error.message
+            status: error.response?.status,
+            error: error.message,
+            message: "Account Service communication failed"
         });
 
         throw new Error(

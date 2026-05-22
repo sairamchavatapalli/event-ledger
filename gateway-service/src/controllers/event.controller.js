@@ -22,7 +22,9 @@ const processEvent = async (req, res) => {
     } catch (error) {
 
         res.status(503).json({
-            message: "Account Service unavailable"
+            message: "Account Service unavailable",
+            traceId: req.traceId,
+            retryable: true
         });
     }
 };
