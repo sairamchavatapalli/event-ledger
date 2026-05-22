@@ -6,11 +6,17 @@ const initializeDatabase = require("./database/initDatabase");
 const PORT = process.env.PORT || 3000;
 
 const startServer = async () => {
+
     await initializeDatabase();
 
     app.listen(PORT, () => {
         console.log(`Gateway Service running on port ${PORT}`);
     });
+
 };
 
-startServer();
+if (require.main === module) {
+    startServer();
+}
+
+module.exports = app;
