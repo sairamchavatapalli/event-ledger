@@ -3,6 +3,9 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 
+
+const accountRoutes = require("./routes/account.routes");
+
 const app = express();
 
 app.use(express.json());
@@ -16,5 +19,7 @@ app.get("/health", (req, res) => {
     service: "account-service"
   });
 });
+
+app.use(accountRoutes);
 
 module.exports = app;
