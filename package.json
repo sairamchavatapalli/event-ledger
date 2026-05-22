@@ -1,0 +1,23 @@
+{
+  "name": "event-ledger",
+  "version": "1.0.0",
+  "description": "Event Ledger System - Financial transaction processing microservices",
+  "private": true,
+  "workspaces": [
+    "gateway",
+    "account-service"
+  ],
+  "scripts": {
+    "start": "concurrently \"npm start --workspace=gateway\" \"npm start --workspace=account-service\"",
+    "dev": "concurrently \"npm run dev --workspace=gateway\" \"npm run dev --workspace=account-service\"",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
+  }
+}
